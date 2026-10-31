@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
+using MiniEcommerce.Infrastructure;
 using MiniEcommerce.Models;
 
 namespace MiniEcommerce.Services;
@@ -11,8 +11,6 @@ namespace MiniEcommerce.Services;
 /// </summary>
 public class CarrinhoDeCompras
 {
-    private static readonly CultureInfo CulturaBrasileira = CultureInfo.GetCultureInfo("pt-BR");
-
     private readonly List<ItemCarrinho> _itens = new();
 
     /// <summary>Itens atualmente no carrinho (somente leitura).</summary>
@@ -150,13 +148,13 @@ public class CarrinhoDeCompras
         {
             sb.AppendLine(
                 $"{item.Produto.Nome,-30}{item.Quantidade,6}" +
-                $"{item.Produto.Preco.ToString("C", CulturaBrasileira),16}" +
-                $"{item.Subtotal.ToString("C", CulturaBrasileira),16}");
+                $"{item.Produto.Preco.Moeda(),16}" +
+                $"{item.Subtotal.Moeda(),16}");
         }
 
         sb.AppendLine(new string('-', 68));
         sb.AppendLine($"Produtos distintos: {TotalDeProdutos} | Unidades: {QuantidadeTotalDeItens} | " +
-                      $"Subtotal: {Subtotal.ToString("C", CulturaBrasileira)}");
+                      $"Subtotal: {Subtotal.Moeda()}");
 
         return sb.ToString();
     }

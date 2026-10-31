@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
+using MiniEcommerce.Infrastructure;
 using MiniEcommerce.Models;
 
 namespace MiniEcommerce.Services;
@@ -10,8 +10,6 @@ namespace MiniEcommerce.Services;
 /// </summary>
 public class CatalogoProdutos
 {
-    private static readonly CultureInfo CulturaBrasileira = CultureInfo.GetCultureInfo("pt-BR");
-
     private readonly List<Produto> _produtos = new();
     private int _ultimoIdGerado;
 
@@ -149,14 +147,14 @@ public class CatalogoProdutos
 
         foreach (var produto in _produtos)
         {
-            var preco = produto.Preco.ToString("C", CulturaBrasileira);
+            var preco = produto.Preco.Moeda();
             var situacao = produto.EstaDisponivel ? string.Empty : "  (esgotado)";
 
             sb.AppendLine($"{produto.Id,-4}{produto.Nome,-30}{preco,14}{produto.QuantidadeEstoque,10}{situacao}");
         }
 
         sb.AppendLine(new string('-', 58));
-        sb.AppendLine($"Total de produtos: {_produtos.Count} | Valor em estoque: {ValorTotalEmEstoque().ToString("C", CulturaBrasileira)}");
+        sb.AppendLine($"Total de produtos: {_produtos.Count} | Valor em estoque: {ValorTotalEmEstoque().Moeda()}");
 
         return sb.ToString();
     }

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using MiniEcommerce.Infrastructure;
 
 namespace MiniEcommerce.Models;
 
@@ -10,8 +10,6 @@ namespace MiniEcommerce.Models;
 /// </summary>
 public class ItemPedido
 {
-    private static readonly CultureInfo CulturaBrasileira = CultureInfo.GetCultureInfo("pt-BR");
-
     /// <summary>Identificador do produto adquirido.</summary>
     public int ProdutoId { get; }
 
@@ -78,5 +76,5 @@ public class ItemPedido
     }
 
     public override string ToString() =>
-        $"{NomeProduto,-28} {Quantidade,3} x {PrecoUnitario.ToString("C", CulturaBrasileira),12} = {Subtotal.ToString("C", CulturaBrasileira),12}";
+        $"{NomeProduto,-28} {Quantidade,3} x {PrecoUnitario.Moeda(),12} = {Subtotal.Moeda(),12}";
 }

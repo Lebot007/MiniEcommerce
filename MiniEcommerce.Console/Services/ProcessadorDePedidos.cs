@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
+using MiniEcommerce.Infrastructure;
 using MiniEcommerce.Models;
 
 namespace MiniEcommerce.Services;
@@ -16,8 +16,6 @@ namespace MiniEcommerce.Services;
 /// </remarks>
 public class ProcessadorDePedidos
 {
-    private static readonly CultureInfo CulturaBrasileira = CultureInfo.GetCultureInfo("pt-BR");
-
     private readonly CatalogoProdutos _catalogo;
     private readonly List<Pedido> _pedidos = new();
     private int _ultimoNumeroGerado;
@@ -126,14 +124,14 @@ public class ProcessadorDePedidos
         foreach (var pedido in _pedidos)
         {
             sb.AppendLine(
-                $"{pedido.Numero,6}{pedido.RealizadoEm.ToString("dd/MM/yyyy HH:mm"),20}" +
+                $"{pedido.Numero,6}{pedido.RealizadoEm.DataHora(),20}" +
                 $"{pedido.TotalDeProdutos,10}{pedido.QuantidadeTotalDeItens,10}" +
-                $"{pedido.ValorTotal.ToString("C", CulturaBrasileira),18}");
+                $"{pedido.ValorTotal.Moeda(),18}");
         }
 
         sb.AppendLine(new string('-', 64));
         sb.AppendLine($"Pedidos: {TotalDePedidos} | Unidades vendidas: {QuantidadeTotalDeItensVendidos} | " +
-                      $"Faturamento: {FaturamentoTotal.ToString("C", CulturaBrasileira)}");
+                      $"Faturamento: {FaturamentoTotal.Moeda()}");
 
         return sb.ToString();
     }

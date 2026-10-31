@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using MiniEcommerce.Infrastructure;
 using MiniEcommerce.Models;
 using MiniEcommerce.Services;
 
@@ -17,12 +18,10 @@ using MiniEcommerce.Services;
 //  por testes unitários no projeto MiniEcommerce.Tests.
 // ============================================================================
 
-var culturaBrasileira = CultureInfo.GetCultureInfo("pt-BR");
-
 // Fixa a cultura da aplicação para que valores e datas saiam sempre no padrão
 // brasileiro (R$ 1.234,56 e dd/MM/aaaa), independentemente do sistema operacional.
-CultureInfo.DefaultThreadCurrentCulture = culturaBrasileira;
-CultureInfo.DefaultThreadCurrentUICulture = culturaBrasileira;
+CultureInfo.DefaultThreadCurrentCulture = Formatacao.CulturaBrasileira;
+CultureInfo.DefaultThreadCurrentUICulture = Formatacao.CulturaBrasileira;
 
 var catalogo = new CatalogoProdutos();
 var carrinho = new CarrinhoDeCompras();
@@ -215,7 +214,7 @@ void AdicionarAoCarrinho()
     if (carrinho.TryAdicionar(produto, quantidade, out var erro))
     {
         EscreverSucesso($"{quantidade} unidade(s) de '{produto.Nome}' adicionada(s) ao carrinho.");
-        Console.WriteLine($"       Subtotal do carrinho: {FormatarMoeda(carrinho.Subtotal)}");
+        Console.WriteLine($"       Subtotal do carrinho: {carrinho.Subtotal.Moeda()}");
         return;
     }
 
@@ -299,7 +298,7 @@ void FinalizarPedido()
     }
 
     Console.WriteLine(carrinho.ObterResumoFormatado());
-    Console.WriteLine($"Valor a pagar: {FormatarMoeda(carrinho.Subtotal)}");
+    Console.WriteLine($"Valor a pagar: {carrinho.Subtotal.Moeda()}");
     Console.WriteLine();
 
     if (!Confirmar("Confirmar a compra e dar baixa automática no estoque? (S/N): "))
@@ -424,7 +423,7 @@ bool LerPreco(string rotulo, out decimal valor)
             return false;
         }
 
-        if (ConverterDecimal(linha, out valor))
+        if (Formatacao.TentarConverterDecimal(linha, out valor))
         {
             return true;
         }
@@ -447,7 +446,7 @@ bool LerInteiro(string rotulo, out int valor)
             return false;
         }
 
-        if (int.TryParse(linha.Trim(), NumberStyles.Integer, culturaBrasileira, out valor))
+        if (Formatacao.TentarConverterInteiro(linha, out valor))
         {
             return true;
         }
@@ -476,7 +475,7 @@ bool LerInteiroOpcional(string rotulo, out int? valor)
             return true;
         }
 
-        if (int.TryParse(linha.Trim(), NumberStyles.Integer, culturaBrasileira, out var numero))
+        if (Formatacao.TentarConverterInteiro(linha, out var numero))
         {
             valor = numero;
             return true;
@@ -499,26 +498,3 @@ bool Confirmar(string rotulo)
 
     return linha.Trim().ToLowerInvariant() is "s" or "sim" or "y" or "yes";
 }
-
-// Aceita os dois formatos mais comuns ao digitar um preço:
-//   "1.234,56" e "249,90" -> vírgula decimal (padrão brasileiro)
-//   "249.90"              -> ponto decimal (padrão internacional)
-static bool ConverterDecimal(string texto, out decimal valor)
-{
-    valor = 0m;
-
-    var limpo = texto.Trim();
-
-    if (limpo.Length == 0)
-    {
-        return false;
-    }
-
-    var cultura = limpo.Contains(',')
-        ? CultureInfo.GetCultureInfo("pt-BR")
-        : CultureInfo.InvariantCulture;
-
-    return decimal.TryParse(limpo, NumberStyles.Number, cultura, out valor);
-}
-
-static string FormatarMoeda(decimal valor) => valor.ToString("C", CultureInfo.GetCultureInfo("pt-BR"));

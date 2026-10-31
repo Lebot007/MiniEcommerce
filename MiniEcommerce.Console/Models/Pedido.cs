@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
+using MiniEcommerce.Infrastructure;
 
 namespace MiniEcommerce.Models;
 
@@ -10,8 +10,6 @@ namespace MiniEcommerce.Models;
 /// </summary>
 public class Pedido
 {
-    private static readonly CultureInfo CulturaBrasileira = CultureInfo.GetCultureInfo("pt-BR");
-
     private readonly List<ItemPedido> _itens;
 
     /// <summary>Número sequencial do pedido. Sempre maior que zero.</summary>
@@ -33,7 +31,7 @@ public class Pedido
     public decimal ValorTotal { get; }
 
     /// <summary>Valor total já formatado em moeda brasileira.</summary>
-    public string ValorTotalFormatado => ValorTotal.ToString("C", CulturaBrasileira);
+    public string ValorTotalFormatado => ValorTotal.Moeda();
 
     /// <param name="numero">Número sequencial do pedido (maior que zero).</param>
     /// <param name="itens">Itens adquiridos; ao menos um, nenhum nulo.</param>
@@ -73,7 +71,7 @@ public class Pedido
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine($"Pedido nº {Numero} - realizado em {RealizadoEm:dd/MM/yyyy HH:mm}");
+        sb.AppendLine($"Pedido nº {Numero} - realizado em {RealizadoEm.DataHora()}");
         sb.AppendLine($"{"Produto",-30}{"Qtd.",6}{"Preço unit.",16}{"Subtotal",16}");
         sb.AppendLine(new string('-', 68));
 
@@ -81,8 +79,8 @@ public class Pedido
         {
             sb.AppendLine(
                 $"{item.NomeProduto,-30}{item.Quantidade,6}" +
-                $"{item.PrecoUnitario.ToString("C", CulturaBrasileira),16}" +
-                $"{item.Subtotal.ToString("C", CulturaBrasileira),16}");
+                $"{item.PrecoUnitario.Moeda(),16}" +
+                $"{item.Subtotal.Moeda(),16}");
         }
 
         sb.AppendLine(new string('-', 68));
@@ -93,6 +91,6 @@ public class Pedido
     }
 
     public override string ToString() =>
-        $"Pedido nº {Numero} ({RealizadoEm:dd/MM/yyyy HH:mm}) - {TotalDeProdutos} produto(s), " +
+        $"Pedido nº {Numero} ({RealizadoEm.DataHora()}) - {TotalDeProdutos} produto(s), " +
         $"{QuantidadeTotalDeItens} unidade(s) - {ValorTotalFormatado}";
 }
