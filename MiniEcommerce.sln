@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniEcommerce.Console", "MiniEcommerce.Console\MiniEcommerce.Console.csproj", "{262DFB8E-532F-4BDF-8869-9DA7A243BC7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniEcommerce.Tests", "MiniEcommerce.Tests\MiniEcommerce.Tests.csproj", "{DD84F2CC-3755-4CC6-8EB0-AE1962C7D98A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{262DFB8E-532F-4BDF-8869-9DA7A243BC7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{262DFB8E-532F-4BDF-8869-9DA7A243BC7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{262DFB8E-532F-4BDF-8869-9DA7A243BC7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{262DFB8E-532F-4BDF-8869-9DA7A243BC7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD84F2CC-3755-4CC6-8EB0-AE1962C7D98A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD84F2CC-3755-4CC6-8EB0-AE1962C7D98A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD84F2CC-3755-4CC6-8EB0-AE1962C7D98A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD84F2CC-3755-4CC6-8EB0-AE1962C7D98A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
